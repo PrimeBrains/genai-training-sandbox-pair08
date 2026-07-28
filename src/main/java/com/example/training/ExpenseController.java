@@ -26,7 +26,6 @@ public class ExpenseController {
      */
     @PostMapping("/reimburse")
     public ReimburseResponse reimburse(@RequestBody ReimburseRequest request) {
-        validate(request);
         var item = new ExpenseItem(request.category(), request.amount());
         return new ReimburseResponse(expenseService.reimburse(item));
     }
@@ -40,17 +39,10 @@ public class ExpenseController {
      */
     @PostMapping("/total")
     public TotalResponse total(@RequestBody List<ReimburseRequest> requests) {
-        requests.forEach(this::validate);
         var items = requests.stream()
                 .map(r -> new ExpenseItem(r.category(), r.amount()))
                 .toList();
         return new TotalResponse(expenseService.total(items));
-    }
-
-    private void validate(ReimburseRequest request) {
-        if (request.amount() < 0) {
-            throw new IllegalArgumentException("amount must be non-negative: " + request.amount());
-        }
     }
 
     record ReimburseRequest(Category category, int amount) {}
