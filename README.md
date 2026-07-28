@@ -52,6 +52,7 @@ classDiagram
         TRANSPORT
         MEAL
         OTHER
+        LODGING
     }
 
     class ExpenseService {
