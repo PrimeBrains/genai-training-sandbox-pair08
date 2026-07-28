@@ -10,7 +10,7 @@ public record ExpenseItem(Category category, int amount) {
 
     public ExpenseItem {
         if (amount < 0) {
-            throw new IllegalArgumentException("amount must be non-negative: " + amount);
+            throw new IllegalArgumentException("金額は0以上である必要があります: " + amount);
         }
     }
 
