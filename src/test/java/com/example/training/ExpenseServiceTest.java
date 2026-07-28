@@ -62,4 +62,22 @@ class ExpenseServiceTest {
     void totalEmpty() {
         assertThat(service.total(List.of())).isZero();
     }
+
+    @Test
+    @DisplayName("宿泊費: 上限以内なら全額支給される")
+    void lodgingWithinCap() {
+        assertThat(service.reimburse(new ExpenseItem(Category.LODGING, 8_000))).isEqualTo(8_000);
+    }
+
+    @Test
+    @DisplayName("宿泊費: 上限を超えた分は支給されない（上限10,000円で頭打ち）")
+    void lodgingOverCap() {
+        assertThat(service.reimburse(new ExpenseItem(Category.LODGING, 15_000))).isEqualTo(10_000);
+    }
+
+    @Test
+    @DisplayName("宿泊費: ちょうど上限額なら全額支給される")
+    void lodgingExactlyCap() {
+        assertThat(service.reimburse(new ExpenseItem(Category.LODGING, 10_000))).isEqualTo(10_000);
+    }
 }
