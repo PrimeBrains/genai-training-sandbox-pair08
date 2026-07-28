@@ -1,6 +1,7 @@
 package com.example.training;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.example.training.ExpenseItem.Category;
 import java.util.List;
@@ -79,5 +80,18 @@ class ExpenseServiceTest {
     @DisplayName("宿泊費: ちょうど上限額なら全額支給される")
     void lodgingExactlyCap() {
         assertThat(service.reimburse(new ExpenseItem(Category.LODGING, 10_000))).isEqualTo(10_000);
+    }
+
+    @Test
+    @DisplayName("バリデーション: 金額が負の場合は例外がスローされる")
+    void negativeAmountThrows() {
+        assertThatThrownBy(() -> new ExpenseItem(Category.OTHER, -1))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("バリデーション: 金額が0の場合は正常に生成できる")
+    void zeroAmountIsAllowed() {
+        assertThat(service.reimburse(new ExpenseItem(Category.OTHER, 0))).isZero();
     }
 }
