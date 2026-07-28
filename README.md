@@ -64,6 +64,50 @@ classDiagram
     ExpenseService --> ExpenseItem : uses
 ```
 
+## アプリの起動と使い方
+
+### 起動
+
+```powershell
+.\gradlew.bat bootRun
+```
+
+起動後、`http://localhost:8080` でアクセスできます。
+
+### API の使い方
+
+#### Swagger UI（ブラウザ）
+
+`http://localhost:8080/swagger-ui.html` を開くと、API 仕様の確認とその場での実行ができます。
+
+#### curl での呼び出し例
+
+**1明細の支給額を計算 (`POST /api/reimburse`)**
+
+```powershell
+curl -X POST http://localhost:8080/api/reimburse `
+  -H "Content-Type: application/json" `
+  -d '{"category": "TRANSPORT", "amount": 5000}'
+# -> {"reimbursed":3000}
+```
+
+**複数明細の合計を計算 (`POST /api/total`)**
+
+```powershell
+curl -X POST http://localhost:8080/api/total `
+  -H "Content-Type: application/json" `
+  -d '[{"category":"TRANSPORT","amount":5000},{"category":"MEAL","amount":1000},{"category":"OTHER","amount":2000}]'
+# -> {"total":5500}
+```
+
+費目（`category`）に指定できる値: `TRANSPORT`（交通費）, `MEAL`（食事代）, `OTHER`（その他）, `LODGING`（宿泊費）
+
+### テストの実行
+
+```powershell
+.\gradlew.bat test
+```
+
 ## 進め方
 
 このリポジトリの Issues にタスクが積んであります。Claude Code に「次にやるべきタスクを提案して」と話しかけるところから始めてください。
